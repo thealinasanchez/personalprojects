@@ -1,0 +1,45 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --blue: #4FA1E3;
+}
+
+body, #app {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+}
+
+.userAddsToList {
+    padding-left: 10%;
+}
+
+input {
+    width: 100%;
+    height: 30px;
+    margin-bottom: 20px;
+}
+
+#add {
+    margin-top: 10px;
+    width: 100px;
+    height: 35px;
+    border-radius: 3px;
+    background-color: var(--blue);
+    border: none;
+    color: white;
+    margin-bottom: 70px;
+}
+
+.search {
+    padding-left: 10%;
+}
