@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Magic 8 Ball</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <div id="eight-ball">
+        <div id="message-area">
+          <p>{{message}}</p>
+        </div>
+      </div>
+      <div id="question-area">
+        <p v-if="question.length > 1 && !isValidQuestion()">
+          Questions end with a ?
+        </p>
+        <p v-else>Ask a question</p>
+        <input type="text" v-model="question" />
+        <button
+          v-on:click="askQuestion"
+          v-show="question.length > 1 && isValidQuestion()"
+        >
+          Ask Question
+        </button>
+      </div>
+
+      <div>
+        <div v-for="item in history">
+          <p>Question: {{item.question}}</p>
+          <p>Answer: {{item.answer}}</p>
+          <button v-on:click="deleteItem(item)">X</button>
+        </div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
