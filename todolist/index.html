@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TO-DO LIST</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Content goes here -->
+        <div class="userAddsToList">
+            <h1>To-Do List</h1>
+            <h3>Add Item</h3>
+            <p>Description</p>
+            <input type="text" v-model="description" />
+            <p>Category</p>
+            <input type="text" v-model="category" />
+            <button id="add" v-on:click="addStuff()">Add</button>
+        </div>
+
+        <div class="search">
+            <input type="text" placeholder="Search..." v-model="search" />
+            <p>Sort By Category</p>
+        </div>
+
+        <div 
+        class="otherList" 
+        v-for="(item, index) in filteredList"
+        v-if="search.length > 0 && filteredList.length > 0"
+        >
+            <div>{{item.description}}</div>
+            <div>{{item.category}}</div>
+            <button v-on:click="toggleModal(index)">Edit</button>
+            <button v-on:click="deleteStuff(item)">Delete</button>
+        </div>
+
+        <div 
+        class="showingList" 
+        v-for="(item, index) in list"
+        v-else
+        >
+            <div>{{item.description}}</div>
+            <div>{{item.category}}</div>
+            <button v-on:click="toggleModal(index)">Edit</button>
+            <button v-on:click="deleteStuff(item)">Delete</button>
+        </div>
+
+        <div class="modal" v-show="modalOpen">
+            <div class="content">
+                <div id="close" v-on:click="toggleModal()">x</div>
+                Description <input type="text" v-model="modal.description">
+                Category <input type="text" v-model="modal.category">
+                <button v-on:click="updateList()">Save</button>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
