@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- Content goes here -->
+      <header>
+        <h1>Expense Tracker</h1>
+        <input type="text" placeholder="Search..." v-model="search" />
+        <div v-on:click="resetSearch()" id="reset">x</div>
+      </header>
+      <div class="expenses">
+        <div class="row-head">
+          <div>Description</div>
+          <div>
+            Amount
+            <span v-on:click="sortExpenses()" v-if="sortOrder == 'asc'">&and;</span>
+            <span v-on:click="sortExpenses()" v-else>&or;</span>
+          </div>
+          <div>Category</div>
+          <div></div>
+        </div>
+        <div
+          v-for="exp in filteredExpenses"
+          class="row-body"
+          v-if="search.length > 0 && filteredExpenses.length > 0"
+        >
+          <div>{{exp.description}}</div>
+          <div v-bind:style="[exp.amount > 0 ? {color: 'var(--green)'} : {color: 'var(--red)'}]">
+            {{exp.amount}}
+          </div>
+          <div>{{exp.category}}</div>
+        </div>
+
+        <div v-for="(exp, index) in expenses" class="row-body" v-else>
+          <div>{{exp.description}}</div>
+          <div v-bind:style="[exp.amount > 0 ? {color: 'var(--green)'} : {color: 'var(--red)'}]">
+            {{exp.amount}}
+          </div>
+          <div>{{exp.category}}</div>
+          <button @click="deleteExpense(index)">Delete</button>
+          <button v-on:click="toggleModal(index)">Edit</button>
+        </div>
+        <div
+          class="row-footer"
+          v-if="search.length > 0 && filteredExpenses.length > 0"
+          >
+          <div>TOTAL</div>
+          <div v-bind:style="[filteredBalance > 0 ? {color: 'var(--green)'} : {color: 'var(--red)'}]">
+            {{filteredBalance}}
+          </div>
+          <div></div>
+          <div></div>
+        </div>
+        <div class="row-footer" v-else>
+          <div>TOTAL</div>
+          <div v-bind:style="[balance > 0 ? {color: 'var(--green)'} : {color: 'var(--red)'}]">
+            {{balance}}
+          </div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+      <h2>Add expense</h2>
+      <form @submit.prevent="addExpense()">
+        <label>
+          <span>Description</span>
+          <input type="text" v-model="newExpense.description">
+        </label>
+        
+        <label>
+          <span>Amount</span>
+          <input type="number" v-model="newExpense.amount">
+        </label>
+
+        <label>
+          <span>Category</span>
+          <input type="text" v-model="newExpense.category">
+        </label>
+        <button>Add New</button>
+      </form>
+      <div class="modal" v-show="modalOpen">
+        <div class="content">
+          <div id="close" @click="toggleModal()">x</div>
+          Description<input type="text" v-model="modal.description" />
+          Amount<input type="text" v-model="modal.amount" /> 
+          Category<input type="text" v-model="modal.category" />
+          <button v-on:click="updateExpense()">Save</button>
+        </div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
