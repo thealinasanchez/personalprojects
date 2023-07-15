@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue App</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Content goes here -->
+        <h1>Dice Roll App</h1>
+        <input type="number" v-model="numInput">
+        <button v-on:click="addDie()">Add Die</button>
+        <div class="dice-container">
+            <div v-for="(die, index) in dice" class="die" @click="rollDie(index)" @click.ctrl="deleteDie(index)">
+                <span>{{die.sides}}</span>
+                <span>{{die.value}}</span>
+            </div>
+        </div>
+
+        <button @click="rollAllDice()">Roll all Dice</button>
+
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
