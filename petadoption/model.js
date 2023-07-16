@@ -3,7 +3,7 @@ require("dotenv").config({ path: "./.env" });
 mongoose.connect(process.env.DB_LINK);
 
 const petSchema = new mongoose.Schema({
-  name: {
+  petname: {
     type: String,
     required: [true, "Must have a name"],
   },
