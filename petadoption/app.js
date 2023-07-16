@@ -16,7 +16,7 @@ Vue.createApp({
             modal: {
                 index: -1,
                 fullname: "",
-                phoneNumber: "",
+                phoneNumber: 0,
                 email: "",
                 petId: 0
             },
@@ -31,7 +31,7 @@ Vue.createApp({
             },
             newApplicant: {
                 fullname: "",
-                phoneNumber: "",
+                phoneNumber: 0,
                 email: "",
                 petId: 0,
             },
