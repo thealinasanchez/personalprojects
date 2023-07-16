@@ -1,0 +1,33 @@
+<DOCTYPE html>
+    <html>
+        <head>
+            <link rel="stylesheet" href="style.css">
+            <title>Read it</title>
+        </head>
+        <body>
+            <h1>Read it</h1>
+            <div id="app">
+            <!-- Everything in here is managed by Vue -->
+            <p>Book Title:</p>
+            <input type="text" placeholder="Book title" v-model="bookName">
+            <p>Book Author:</p>
+            <input type="text" placeholder="Author" v-model="bookAuthor">
+            <p>Book Rating:</p>
+            <input type="number" placeholder="Rating" v-model="bookRating">
+            <button v-on:click="addBook">Add book</button>
+            <div v-if="books.length>0">
+                <h2>{{heading}}</h2>
+            <ol>
+                <li v-for="book,i in books" v-bind:style="{ backgroundColor: i % 2==0 ? '#EEEEEE' : 'CCCCCC' }">
+                    <div><strong>{{ book.title }} </strong></div>
+                    <div>Author: {{ book.author }} </div>
+                    <div>Rating: {{ book.rating }} </div>
+                </li>
+            </ol>
+            </div>
+            <div v-else>Please add a book to get started.</div>
+            </div>
+            <script src="https://unpkg.com/vue@3"></script>
+            <script src="app.js"></script>
+        </body>
+    </html>
