@@ -11,7 +11,7 @@ app.use(express.json());
 
 function petValidator(pet) {
   var errors = [];
-  if (!pet.name) {
+  if (!pet.petname) {
     errors.push("Pet needs a name");
   }
   if (!pet.species) {
@@ -33,7 +33,7 @@ function petValidator(pet) {
 
 function ApplicationValidator(AdoptionApp) {
   var errors = [];
-  if (!AdoptionApp.name) {
+  if (!AdoptionApp.fullname) {
     errors.push("Application needs a name");
   }
   if (!AdoptionApp.phoneNumber) {
@@ -93,7 +93,7 @@ app.get("/applications/:applicationId", async (req, res) => {
 
 app.post("/pets", async (req, res) => {
   const newPet = new model.Pet({
-    name: req.body.name,
+    petname: req.body.petname,
     species: req.body.species,
     breed: req.body.breed,
     age: req.body.age,
@@ -119,7 +119,7 @@ app.post("/pets", async (req, res) => {
 
 app.post("/applications", async (req, res) => {
   const newApplication = new model.AdoptionApp({
-    name: req.body.name,
+    fullname: req.body.fullname,
     phoneNumber: req.body.phoneNumber,
     email: req.body.email,
     petId: req.body.petId,
