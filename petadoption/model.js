@@ -26,7 +26,7 @@ const petSchema = new mongoose.Schema({
 });
 
 const adoptionAppSchema = new mongoose.Schema({
-  name: {
+  fullname: {
     type: String,
     required: [true, "Must have a name"],
   },
