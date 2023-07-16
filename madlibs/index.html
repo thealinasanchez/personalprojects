@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue App</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- Content goes here -->
+        <h1>MadLibs Apps</h1>
+        <div v-if="!completed">
+            <p>Give me a {{ prompt }}</p>
+            <input type="text" v-model="currentPrompt">
+            <button @click="savePrompt()">Next</button>
+        </div>
+        <div v-if="completed">
+            <h2>Completed MadLib</h2>
+            <p>{{completedMadlib}}</p>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
