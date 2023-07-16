@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue App</title>
+    <link href="app.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- Content goes here -->
+      <header>
+        <nav>
+          <a href="index.html">HOME</a>
+          <a href="applications.html" class="active">APPLICATIONS</a>
+        </nav>
+        <h1>Adoption Applications</h1>
+      </header>
+      <main class="all-apps">
+        <div class="row-head">
+            <div>
+                Applicant's Name
+                <span @click="sortName()">&and;</span>
+                <span @click="sortName()">&or;</span>
+            </div>
+            <div>Applicant's Number</div>
+            <div>Applicant's Email</div>
+            <div>Applicant's Pet ID</div>
+        </div>
+        <div v-for="(app,index) in applicants" class="row-body">
+          <div>{{app.name}}</div>
+          <div>{{app.phoneNumber}}</div>
+          <div>{{app.email}}</div>
+          <div>{{app.petId}}</div>
+        </div>
+      </main>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>
