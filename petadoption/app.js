@@ -5,7 +5,7 @@ Vue.createApp({
             search: "",
             filteredPets: [],
             newPet: {
-                name: "",
+                petname: "",
                 species: "",
                 breed: "",
                 age: "",
@@ -30,7 +30,7 @@ Vue.createApp({
                 gender: ""
             },
             newApplicant: {
-                name: "",
+                fullname: "",
                 phoneNumber: "",
                 email: "",
                 petId: "",
@@ -70,15 +70,15 @@ Vue.createApp({
             console.log(this.sortOrderApps);
             if (this.sortOrderApps = 'asc') {
                 function compare(a,b) {
-                    if (a.name > b.name) return -1;
-                    if (a.name < b.name) return 1;
+                    if (a.fullname > b.fullname) return -1;
+                    if (a.fullname < b.fullname) return 1;
                     return 0;
                 }
                 this.sortOrderApps = 'desc';
             } else {
                 function compare(a,b) {
-                    if (a.name < b.name) return -1;
-                    if (a.name > b.name) return 1;
+                    if (a.fullname < b.fullname) return -1;
+                    if (a.fullname > b.fullname) return 1;
                     return 0;
                 }
                 this.sortOrderApps = 'asc';
@@ -113,7 +113,7 @@ Vue.createApp({
 
         var encodedData =
             "petname=" +
-            encodeURIComponent(this.petmodal.name) +
+            encodeURIComponent(this.petmodal.petname) +
             "&species=" +
             encodeURIComponent(this.petmodal.species) +
             "&breed=" +
@@ -192,8 +192,8 @@ Vue.createApp({
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
   
         var encodedData =
-          "name=" +
-          encodeURIComponent(this.newApplicant.name) +
+          "fullname=" +
+          encodeURIComponent(this.newApplicant.fullname) +
           "&phoneNumber=" +
           encodeURIComponent(this.newApplicant.phoneNumber) +
           "&email=" +
@@ -232,7 +232,7 @@ Vue.createApp({
     watch: {
       search(newSearch, oldSearch) {
         this.filteredPets = this.pets.filter((pet) => {
-          return pet.name.toLowerCase().includes(newSearch.toLowerCase());
+          return pet.petname.toLowerCase().includes(newSearch.toLowerCase());
         });
       },
     },
