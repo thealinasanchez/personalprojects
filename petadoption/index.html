@@ -36,14 +36,14 @@
             </div>
             <div v-for="pet in filteredPets" class="row-body" 
                 v-if="search.length > 0 && filteredPets.length > 0">
-                <div>{{pet.name}}</div>
+                <div>{{pet.petname}}</div>
                 <div>{{pet.species}}</div>
                 <div>{{pet.breed}}</div>
                 <div>{{pet.age}}</div>
                 <div>{{pet.gender}}</div>
             </div>
             <div v-for="(pet,index) in pets" class="row-body" v-else>
-                <div>{{pet.name}}</div>
+                <div>{{pet.petname}}</div>
                 <div>{{pet.species}}</div>
                 <div>{{pet.breed}}</div>
                 <div>{{pet.age}}</div>
