@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vue App</title>
-    <link href="app.css" rel="stylesheet" type="text/css" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   </head>
 
@@ -31,7 +31,7 @@
             <div>Applicant's Pet ID</div>
         </div>
         <div v-for="(app,index) in applicants" class="row-body">
-          <div>{{app.name}}</div>
+          <div>{{app.fullname}}</div>
           <div>{{app.phoneNumber}}</div>
           <div>{{app.email}}</div>
           <div>{{app.petId}}</div>
