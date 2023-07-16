@@ -18,7 +18,7 @@ Vue.createApp({
                 fullname: "",
                 phoneNumber: "",
                 email: "",
-                petId: ""
+                petId: 0
             },
             petmodalOpen: false,
             petmodal: {
@@ -33,7 +33,7 @@ Vue.createApp({
                 fullname: "",
                 phoneNumber: "",
                 email: "",
-                petId: "",
+                petId: 0,
             },
             sortOrder: "",
             sortOrderApps: ""
