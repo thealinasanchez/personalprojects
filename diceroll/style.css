@@ -7,6 +7,37 @@
 #app {
     background: teal;
     min-height: 100vh;
+    color: white;
+}
+
+input {
+    color: black;
+    background-color: white;
+    border: none;
+    height: 20px;
+    border-radius: 4px;
+    width: 70px;
+}
+
+h1 {
+    padding: 10px;
+}
+
+#dice-faces {
+    padding: 10px;
+}
+
+#dice-faces p {
+    margin-bottom: 5px;
+}
+
+#dice-faces button {
+    margin-left: 6px;
+    padding: 1px 5px;
+    border-radius: 4px;
+    background-color: maroon;
+    color: white;
+    cursor: pointer;
 }
 
 .dice-container {
@@ -31,4 +62,13 @@
 
 .die span:nth-child(2) {
     font-size: 36px;
+}
+
+button {
+    margin: 10px;
+    padding: 1px 5px;
+    background-color: maroon;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
 }
