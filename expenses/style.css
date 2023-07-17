@@ -136,3 +136,38 @@
     border-radius: 5px;
     cursor: pointer;
   }
+
+  #buttons {
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
+  #delete {
+    padding: 2px 8px;
+    margin-right: 5px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  #edit {
+    padding: 2px 8px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .content {
+    color: black;
+  }
+
+  .content button {
+    padding: 5px 8px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+  }
