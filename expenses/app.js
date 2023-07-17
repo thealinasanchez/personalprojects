@@ -77,8 +77,12 @@ Vue.createApp({
     .then((response) => {
       if(response.status === 204) {
         this.expenses[this.modal.index].description = this.modal.description;
-        this.expenses[this.modal.index].amount = parseFloat(this)
+        this.expenses[this.modal.index].amount = parseFloat(this.modal.amount);
+        this.expenses[this.modal.index].category = this.modal.category;
+      } else {
+        alert("Not able to add expense");
       }
+      this.toggleModal();
     })
   
         // myHeaders = new Headers();
@@ -141,6 +145,21 @@ Vue.createApp({
           }
           else {
             alert("Not able to add expense");
+          }
+        })
+      },
+      deleteExpense: function(index) {
+        var expId = this.expenses[index]._id;
+        var requestOptions = {
+          method: "DELETE"
+        };
+        fetch(`http://localhost:8080/expenses/${expId}`, requestOptions)
+        .then((response) => {
+          if (response.status === 204) {
+            console.log("success");
+            this.expenses.splice(index,1);
+          } else {
+            alert("Unable to delete expense");
           }
         })
       }
