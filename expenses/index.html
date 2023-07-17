@@ -46,8 +46,10 @@
             {{exp.amount}}
           </div>
           <div>{{exp.category}}</div>
-          <button @click="deleteExpense(index)">Delete</button>
-          <button v-on:click="toggleModal(index)">Edit</button>
+          <div id="buttons">
+            <button @click="deleteExpense(index)" id="delete">Delete</button>
+            <button v-on:click="toggleModal(index)" id="edit">Edit</button>
+          </div>
         </div>
         <div
           class="row-footer"
