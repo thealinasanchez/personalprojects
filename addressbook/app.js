@@ -1,7 +1,8 @@
 Vue.createApp({
     data() {
       return {
-        namez: "",
+        fullname: "",
+        number:0,
         address: "",
         contact: "",
         addresses: [],
@@ -10,7 +11,8 @@ Vue.createApp({
     methods: {
       addContact: function () {
         this.addresses.push({
-          full_name: this.namez,
+          full_name: this.fullname,
+          full_number: this.number,
           full_address: this.address,
         });
         console.log(this.addresses);
