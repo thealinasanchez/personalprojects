@@ -6,8 +6,52 @@
 
 body {
   background-color: #F7F7F7;
+  color: #1596D6;
 }
 
 h1 {
   margin: 10px;
+}
+
+#input-area label{
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 10px;
+}
+
+#input-area span {
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+#record {
+  margin-left: 10px;
+  padding: 7px 10px;
+  background-color: #1596D6;
+  border: none;
+  font-weight: bold;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+button:hover {
+  color: white;
+}
+
+.address-area {
+  color: black;
+  padding: 10px;
+}
+
+.address-area button {
+  margin-right: 10px;
+}
+
+#delete {
+  padding: 7px 10px;
+  background-color: #1596D6;
+  border: none;
+  font-weight: bold;
+  border-radius: 3px;
+  cursor: pointer;
 }
