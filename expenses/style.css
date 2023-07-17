@@ -32,6 +32,10 @@
     flex-flow: row nowrap;
     justify-content: flex-start;
   }
+
+  header h1 {
+    margin-top: 8px;
+  }
   
   .expenses {
     width: 90%;
@@ -74,6 +78,13 @@
   
   #reset {
     margin-left: 8px;
+    margin-top: 12px;
+    border: 1px solid white;
+    margin-bottom: 8px;
+    padding: 5px 8px;
+    border-radius: 70px;
+    background-color: rgba(255, 255, 255, 0.205);
+    cursor: pointer;
   }
   
   .modal {
@@ -111,5 +122,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+  }
+
+  h2 {
+    margin-bottom: 8px;
+  }
+
+  #add-new {
+    margin-left: 10px;
+    padding: 5px 8px;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
   }
