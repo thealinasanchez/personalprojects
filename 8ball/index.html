@@ -34,7 +34,7 @@
         <div v-for="item in history">
           <p>Question: {{item.question}}</p>
           <p>Answer: {{item.answer}}</p>
-          <button v-on:click="deleteItem(item)">X</button>
+          <button v-on:click="deleteItem(item)" id="delete">X</button>
         </div>
       </div>
     </div>
