@@ -31,6 +31,7 @@
 
       <div class="address-area" v-for="contact in addresses">
         <p>Name: {{contact.full_name}}</p>
+        <p>Phone Number: {{contact.full_number}}</p>
         <p>Address: {{contact.full_address}}</p>
         <button v-on:click="deleteContact(contact)" id="delete">Delete</button>
       </div>
