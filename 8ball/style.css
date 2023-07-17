@@ -3,29 +3,52 @@
     padding: 0;
     box-sizing: border-box;
   }
+
+#app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column nowrap;
+}
+
+#eight-ball {
+  width: 500px;
+  height: 500px;
+  background-color: black;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
   
-  #eight-ball {
-    width: 500px;
-    height: 500px;
-    background-color: black;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+#message-area {
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
   
-  #message-area {
-    width: 200px;
-    height: 200px;
-    background-color: white;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .question-area {
-    display: flex;
-    flex-flow: column;
-    max-width: 300px;
-  }
+#question-area {
+  display: flex;
+  flex-flow: column;
+  max-width: 300px;
+  justify-content: center;
+  align-items: center;
+}
+
+#question-area p {
+  margin-bottom: 5px;
+}
+
+#delete {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 8px;
+  margin-left: 40%;
+}
+
