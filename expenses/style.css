@@ -171,3 +171,7 @@
     cursor: pointer;
     font-weight: bold;
   }
+
+  input {
+    color: white;
+  }
