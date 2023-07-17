@@ -13,16 +13,26 @@
     <div id="app">
       <!-- Content goes here -->
       <h1>Vue Address Book</h1>
-      <div class="input area">
-        <input type="text" v-model="namez" placeholder="Enter Name" />
-        <input type="text" v-model="address" placeholder="Enter Address" />
-        <button v-on:click="addContact()">Record Address</button>
+      <div id="input-area">
+        <label>
+          <span>Enter Name:</span>
+          <input type="text" v-model="fullname" placeholder="Name..." required>
+        </label>
+        <label>
+          <span>Enter Phone Number:</span>
+          <input type="tel" v-model="number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="888-888-8888">
+        </label>
+        <label>
+          <span>Enter Address:</span>
+          <input type="text" v-model="address" placeholder="Address...">
+        </label>
       </div>
+      <button v-on:click="addContact()" id="record">Record Address</button>
 
       <div class="address-area" v-for="contact in addresses">
         <p>Name: {{contact.full_name}}</p>
         <p>Address: {{contact.full_address}}</p>
-        <button v-on:click="deleteContact(contact)">Delete</button>
+        <button v-on:click="deleteContact(contact)" id="delete">Delete</button>
       </div>
     </div>
     <script src="app.js"></script>
