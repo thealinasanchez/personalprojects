@@ -14,17 +14,22 @@
     <div id="app">
         <!-- Content goes here -->
         <h1>Dice Roll App</h1>
-        <input type="number" v-model="numInput">
-        <button v-on:click="addDie()">Add Die</button>
+        <div id="dice-faces">
+            <p>Choose how many faces the dice has:</p>
+            <input type="number" v-model="numInput">
+            <button v-on:click="addDie()">Add Die</button>
+        </div>
         <div class="dice-container">
-            <div v-for="(die, index) in dice" class="die" @click="rollDie(index)" @click.ctrl="deleteDie(index)">
+            <div 
+                v-for="(die, index) in dice" 
+                class="die" @click="rollDie(index)" 
+                @click.ctrl="deleteDie(index)"
+            >
                 <span>{{die.sides}}</span>
                 <span>{{die.value}}</span>
             </div>
         </div>
-
         <button @click="rollAllDice()">Roll all Dice</button>
-
     </div>
     <script src="app.js"></script>
 </body>
