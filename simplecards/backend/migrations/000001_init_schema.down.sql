@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS flashcards;
+DROP TABLE IF EXISTS study_sets;
+DROP TABLE IF EXISTS users;
