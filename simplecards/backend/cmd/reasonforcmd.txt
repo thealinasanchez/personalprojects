@@ -1,0 +1,5 @@
+cmd is commonly used in Go for entrypoints
+
+api means this executable runs your backend API
+
+Think of main.go as: start the app, load config, connect DB, start server

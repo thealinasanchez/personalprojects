@@ -1,0 +1,11 @@
+internal means this code is only meant to be used by this app, not imported by outside projects. 
+
+internal/config will load environment variables and app settings (ex: DB host, DB port, app port). Think of it as: read settings from .env and turn them into Go values.
+
+internal/database handles database setup (ex: opening PostgreSQL connection)
+
+internal/server is for setting up the HTTP server and router (ex: creating the router, registering routes, starting the API server)
+
+internal/middleware is for request middleware (ex: auth checks, request logging, panic recovery, CORS)
+
+internal/modules is where freature-based code goes (ex: auth, users, studysets, flashcards)
