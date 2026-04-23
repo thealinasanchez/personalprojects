@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -47,6 +48,19 @@ func (s *Server) registerRoutes() {
 func (s *Server) Start() error {
 	log.Printf("server starting on %s", s.http.Addr)
 	return s.http.ListenAndServe()
+}
+
+func (s *Server) Shutdown(ctx context.Context) error {
+	log.Println("server shutting down")
+
+	if err := s.http.Shutdown(ctx); err != nil {
+		return fmt.Errorf("shutdown server: %w", err)
+	}
+
+	log.Println("closing database pool")
+	s.db.Close()
+
+	return nil
 }
 
 func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
