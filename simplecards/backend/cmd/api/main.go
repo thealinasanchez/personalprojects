@@ -1,12 +1,11 @@
 package main
 
 import (
-	"context"
 	"log"
-	"time"
 
 	"simplecards/backend/internal/config"
 	"simplecards/backend/internal/db"
+	"simplecards/backend/internal/server"
 )
 
 func main() {
@@ -21,15 +20,9 @@ func main() {
 	}
 	defer pool.Close()
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	srv := server.New(cfg, pool)
 
-	var now time.Time
-	err = pool.QueryRow(ctx, "SELECT NOW()").Scan(&now)
-	if err != nil {
-		log.Fatalf("query failed: %v", err)
+	if err := srv.Start(); err != nil {
+		log.Fatalf("server failed: %v", err)
 	}
-
-	log.Println("database pool connected successfully")
-	log.Println("database time:", now)
 }
