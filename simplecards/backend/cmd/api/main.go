@@ -5,9 +5,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/jackc/pgx/v5"
-
 	"simplecards/backend/internal/config"
+	"simplecards/backend/internal/db"
 )
 
 func main() {
@@ -16,14 +15,14 @@ func main() {
 		log.Fatalf("failed to load config: %v", err)
 	}
 
+	conn, err := db.New(cfg)
+	if err != nil {
+		log.Fatalf("failed to connect to database: %v", err)
+	}
+	defer conn.Close(context.Background())
+
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-
-	conn, err := pgx.Connect(ctx, cfg.DBConnString())
-	if err != nil {
-		log.Fatalf("unable to connect to database: %v", err)
-	}
-	defer conn.Close(ctx)
 
 	var now time.Time
 	err = conn.QueryRow(ctx, "SELECT NOW()").Scan(&now)
