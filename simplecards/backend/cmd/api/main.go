@@ -15,21 +15,21 @@ func main() {
 		log.Fatalf("failed to load config: %v", err)
 	}
 
-	conn, err := db.New(cfg)
+	pool, err := db.New(cfg)
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
-	defer conn.Close(context.Background())
+	defer pool.Close()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	var now time.Time
-	err = conn.QueryRow(ctx, "SELECT NOW()").Scan(&now)
+	err = pool.QueryRow(ctx, "SELECT NOW()").Scan(&now)
 	if err != nil {
 		log.Fatalf("query failed: %v", err)
 	}
 
-	log.Println("database connected successfully")
+	log.Println("database pool connected successfully")
 	log.Println("database time:", now)
 }
