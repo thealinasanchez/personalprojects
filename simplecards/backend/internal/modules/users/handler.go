@@ -25,6 +25,7 @@ func NewHandler(db *pgxpool.Pool) *Handler {
 func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/api/v1/users", h.handleUsers)
 	mux.HandleFunc("/api/v1/users/", h.handleUserByID)
+	mux.HandleFunc("/api/v1/login", h.handleLogin)
 }
 
 func (h *Handler) handleUsers(w http.ResponseWriter, r *http.Request) {
@@ -141,6 +142,52 @@ func (h *Handler) createUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusCreated, map[string]any{
+		"user": user,
+	})
+}
+
+func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]string{
+			"error": "method not allowed",
+		})
+		return
+	}
+
+	var req loginUserRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{
+			"error": "invalid json body",
+		})
+		return
+	}
+
+	req = normalizeLoginUserRequest(req)
+
+	if err := validateLoginUserRequest(req); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	user, err := h.service.LoginUser(r.Context(), req)
+	if err != nil {
+		if errors.Is(err, ErrInvalidCredentials) {
+			writeJSON(w, http.StatusUnauthorized, map[string]string{
+				"error": "invalid email or password",
+			})
+			return
+		}
+
+		writeJSON(w, http.StatusInternalServerError, map[string]string{
+			"error": "failed to login",
+		})
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]any{
 		"user": user,
 	})
 }

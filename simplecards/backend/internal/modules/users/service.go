@@ -2,10 +2,13 @@ package users
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
 )
+
+var ErrInvalidCredentials = errors.New("invalid email or password")
 
 type Service struct {
 	repo *Repository
@@ -42,4 +45,26 @@ func (s *Service) CreateUser(ctx context.Context, req createUserRequest) (userRe
 	}
 
 	return s.repo.CreateUser(ctx, params)
+}
+
+func (s *Service) LoginUser(ctx context.Context, req loginUserRequest) (userResponse, error) {
+	userWithHash, err := s.repo.GetUserByEmail(ctx, req.Email)
+	if err != nil {
+		if errors.Is(err, ErrUserNotFound) {
+			return userResponse{}, ErrInvalidCredentials
+		}
+
+		return userResponse{}, err
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(userWithHash.PasswordHash), []byte(req.Password)); err != nil {
+		return userResponse{}, ErrInvalidCredentials
+	}
+
+	return userResponse{
+		ID:        userWithHash.ID,
+		Email:     userWithHash.Email,
+		Username:  userWithHash.Username,
+		CreatedAt: userWithHash.CreatedAt,
+	}, nil
 }

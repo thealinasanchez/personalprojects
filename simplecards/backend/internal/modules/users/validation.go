@@ -64,3 +64,26 @@ func validateCreateUserRequest(req createUserRequest) error {
 
 	return nil
 }
+
+func normalizeLoginUserRequest(req loginUserRequest) loginUserRequest {
+	req.Email = strings.TrimSpace(strings.ToLower(req.Email))
+	req.Password = strings.TrimSpace(req.Password)
+
+	return req
+}
+
+func validateLoginUserRequest(req loginUserRequest) error {
+	if req.Email == "" {
+		return errors.New("email is required")
+	}
+
+	if _, err := mail.ParseAddress(req.Email); err != nil {
+		return errors.New("email must be valid")
+	}
+
+	if req.Password == "" {
+		return errors.New("password is required")
+	}
+
+	return nil
+}
