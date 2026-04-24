@@ -3,6 +3,7 @@ package users
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -103,6 +104,31 @@ func (h *Handler) createUser(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{
 			"error": "invalid json body",
+		})
+		return
+	}
+
+	req.Email = strings.TrimSpace(req.Email)
+	req.Username = strings.TrimSpace(req.Username)
+	req.PasswordHash = strings.TrimSpace(req.PasswordHash)
+
+	if req.Email == "" {
+		writeJSON(w, http.StatusBadRequest, map[string]string{
+			"error": "email is required",
+		})
+		return
+	}
+
+	if req.Username == "" {
+		writeJSON(w, http.StatusBadRequest, map[string]string{
+			"error": "username is required",
+		})
+		return
+	}
+
+	if req.PasswordHash == "" {
+		writeJSON(w, http.StatusBadRequest, map[string]string{
+			"error": "password_hash is required",
 		})
 		return
 	}
