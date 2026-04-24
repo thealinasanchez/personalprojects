@@ -41,10 +41,6 @@ func New(cfg config.Config, db *pgxpool.Pool) *Server {
 	return s
 }
 
-func (s *Server) registerRoutes() {
-	s.mux.HandleFunc("/health", s.healthHandler)
-}
-
 func (s *Server) Start() error {
 	log.Printf("server starting on %s", s.http.Addr)
 	return s.http.ListenAndServe()
@@ -61,15 +57,4 @@ func (s *Server) Shutdown(ctx context.Context) error {
 	s.db.Close()
 
 	return nil
-}
-
-func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	_, _ = fmt.Fprintln(w, "ok")
 }
