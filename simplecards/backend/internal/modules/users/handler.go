@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -22,6 +23,7 @@ func NewHandler(db *pgxpool.Pool) *Handler {
 
 func (h *Handler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/api/v1/users", h.handleUsers)
+	mux.HandleFunc("/api/v1/users/", h.handleUserByID)
 }
 
 func (h *Handler) handleUsers(w http.ResponseWriter, r *http.Request) {
@@ -35,6 +37,60 @@ func (h *Handler) handleUsers(w http.ResponseWriter, r *http.Request) {
 			"error": "method not allowed",
 		})
 	}
+}
+
+func (h *Handler) handleUserByID(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		writeJSON(w, http.StatusMethodNotAllowed, map[string]string{
+			"error": "method not allowed",
+		})
+		return
+	}
+
+	id := strings.TrimPrefix(r.URL.Path, "/api/v1/users/")
+	id = strings.TrimSpace(id)
+
+	if id == "" {
+		writeJSON(w, http.StatusBadRequest, map[string]string{
+			"error": "user id is required",
+		})
+		return
+	}
+
+	var user userResponse
+
+	err := h.db.QueryRow(
+		r.Context(),
+		`
+		SELECT id::text, email, username, created_at::text
+		FROM users
+		WHERE id = $1
+		`,
+		id,
+	).Scan(
+		&user.ID,
+		&user.Email,
+		&user.Username,
+		&user.CreatedAt,
+	)
+
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			writeJSON(w, http.StatusNotFound, map[string]string{
+				"error": "user not found",
+			})
+			return
+		}
+
+		writeJSON(w, http.StatusInternalServerError, map[string]string{
+			"error": "failed to fetch user",
+		})
+		return
+	}
+
+	writeJSON(w, http.StatusOK, map[string]any{
+		"user": user,
+	})
 }
 
 func (h *Handler) listUsers(w http.ResponseWriter, r *http.Request) {
