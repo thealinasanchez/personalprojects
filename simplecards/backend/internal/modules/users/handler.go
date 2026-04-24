@@ -14,19 +14,6 @@ type Handler struct {
 	db *pgxpool.Pool
 }
 
-type userResponse struct {
-	ID        string `json:"id"`
-	Email     string `json:"email"`
-	Username  string `json:"username"`
-	CreatedAt string `json:"created_at"`
-}
-
-type createUserRequest struct {
-	Email        string `json:"email"`
-	Username     string `json:"username"`
-	PasswordHash string `json:"password_hash"`
-}
-
 func NewHandler(db *pgxpool.Pool) *Handler {
 	return &Handler{
 		db: db,
@@ -172,13 +159,4 @@ func (h *Handler) createUser(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusCreated, map[string]any{
 		"user": user,
 	})
-}
-
-func writeJSON(w http.ResponseWriter, status int, data any) {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(status)
-
-	if err := json.NewEncoder(w).Encode(data); err != nil {
-		http.Error(w, `{"error":"failed to encode json"}`, http.StatusInternalServerError)
-	}
 }
