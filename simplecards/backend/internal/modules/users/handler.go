@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -53,6 +54,20 @@ func (h *Handler) handleUserByID(w http.ResponseWriter, r *http.Request) {
 	if id == "" {
 		writeJSON(w, http.StatusBadRequest, map[string]string{
 			"error": "user id is required",
+		})
+		return
+	}
+
+	if strings.Contains(id, "/") {
+		writeJSON(w, http.StatusNotFound, map[string]string{
+			"error": "route not found",
+		})
+		return
+	}
+
+	if _, err := uuid.Parse(id); err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{
+			"error": "invalid user id",
 		})
 		return
 	}
