@@ -2,9 +2,11 @@ package users
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"strings"
 
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -152,6 +154,15 @@ func (h *Handler) createUser(w http.ResponseWriter, r *http.Request) {
 		&user.CreatedAt,
 	)
 	if err != nil {
+		var pgErr *pgconn.PgError
+
+		if errors.As(err, &pgErr) && pgErr.Code == "23505" {
+			writeJSON(w, http.StatusConflict, map[string]string{
+				"error": "email or username already exists",
+			})
+			return
+		}
+
 		writeJSON(w, http.StatusInternalServerError, map[string]string{
 			"error": "failed to create user",
 		})
