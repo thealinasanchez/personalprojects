@@ -11,12 +11,15 @@ import (
 )
 
 type Handler struct {
-	repo *Repository
+	service *Service
 }
 
 func NewHandler(db *pgxpool.Pool) *Handler {
+	repo := NewRepository(db)
+	service := NewService(repo)
+
 	return &Handler{
-		repo: NewRepository(db),
+		service: service,
 	}
 }
 
@@ -70,7 +73,7 @@ func (h *Handler) handleUserByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.repo.GetUserByID(r.Context(), id)
+	user, err := h.service.GetUserByID(r.Context(), id)
 	if err != nil {
 		if errors.Is(err, ErrUserNotFound) {
 			writeJSON(w, http.StatusNotFound, map[string]string{
@@ -91,7 +94,7 @@ func (h *Handler) handleUserByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) listUsers(w http.ResponseWriter, r *http.Request) {
-	users, err := h.repo.ListUsers(r.Context())
+	users, err := h.service.ListUsers(r.Context())
 	if err != nil {
 		writeJSON(w, http.StatusInternalServerError, map[string]string{
 			"error": "failed to fetch users",
@@ -139,7 +142,7 @@ func (h *Handler) createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.repo.CreateUser(r.Context(), req)
+	user, err := h.service.CreateUser(r.Context(), req)
 	if err != nil {
 		if errors.Is(err, ErrUserAlreadyExists) {
 			writeJSON(w, http.StatusConflict, map[string]string{
