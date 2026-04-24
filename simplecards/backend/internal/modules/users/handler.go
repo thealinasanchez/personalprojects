@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -66,7 +65,7 @@ func (h *Handler) handleUserByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if _, err := uuid.Parse(id); err != nil {
+	if err := validateUserID(id); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{
 			"error": "invalid user id",
 		})
@@ -117,27 +116,11 @@ func (h *Handler) createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	req.Email = strings.TrimSpace(req.Email)
-	req.Username = strings.TrimSpace(req.Username)
-	req.PasswordHash = strings.TrimSpace(req.PasswordHash)
+	req = normalizeCreateUserRequest(req)
 
-	if req.Email == "" {
+	if err := validateCreateUserRequest(req); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{
-			"error": "email is required",
-		})
-		return
-	}
-
-	if req.Username == "" {
-		writeJSON(w, http.StatusBadRequest, map[string]string{
-			"error": "username is required",
-		})
-		return
-	}
-
-	if req.PasswordHash == "" {
-		writeJSON(w, http.StatusBadRequest, map[string]string{
-			"error": "password_hash is required",
+			"error": err.Error(),
 		})
 		return
 	}
