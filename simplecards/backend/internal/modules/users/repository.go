@@ -91,7 +91,7 @@ func (r *Repository) GetUserByID(ctx context.Context, id string) (userResponse, 
 	return user, nil
 }
 
-func (r *Repository) CreateUser(ctx context.Context, req createUserRequest) (userResponse, error) {
+func (r *Repository) CreateUser(ctx context.Context, params createUserParams) (userResponse, error) {
 	var user userResponse
 
 	err := r.db.QueryRow(
@@ -101,9 +101,9 @@ func (r *Repository) CreateUser(ctx context.Context, req createUserRequest) (use
 		VALUES ($1, $2, $3)
 		RETURNING id::text, email, username, created_at::text
 		`,
-		req.Email,
-		req.Username,
-		req.PasswordHash,
+		params.Email,
+		params.Username,
+		params.PasswordHash,
 	).Scan(
 		&user.ID,
 		&user.Email,

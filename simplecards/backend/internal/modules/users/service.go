@@ -1,6 +1,11 @@
 package users
 
-import "context"
+import (
+	"context"
+	"fmt"
+
+	"golang.org/x/crypto/bcrypt"
+)
 
 type Service struct {
 	repo *Repository
@@ -21,5 +26,16 @@ func (s *Service) GetUserByID(ctx context.Context, id string) (userResponse, err
 }
 
 func (s *Service) CreateUser(ctx context.Context, req createUserRequest) (userResponse, error) {
-	return s.repo.CreateUser(ctx, req)
+	hashBytes, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return userResponse{}, fmt.Errorf("hash password: %w", err)
+	}
+
+	params := createUserParams{
+		Email:        req.Email,
+		Username:     req.Username,
+		PasswordHash: string(hashBytes),
+	}
+
+	return s.repo.CreateUser(ctx, params)
 }
