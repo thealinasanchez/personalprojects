@@ -10,6 +10,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"simplecards/backend/internal/config"
+	"simplecards/backend/internal/middleware"
 )
 
 type Server struct {
@@ -30,9 +31,11 @@ func New(cfg config.Config, db *pgxpool.Pool) *Server {
 
 	s.registerRoutes()
 
+	handler := middleware.SecurityHeaders(http.HandlerFunc(s.notFoundHandler))
+
 	s.http = &http.Server{
 		Addr:         ":8080",
-		Handler:      http.HandlerFunc(s.notFoundHandler),
+		Handler:      handler,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  30 * time.Second,
