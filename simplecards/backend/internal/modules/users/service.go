@@ -25,6 +25,10 @@ func (s *Service) GetUserByID(ctx context.Context, id string) (userResponse, err
 	return s.repo.GetUserByID(ctx, id)
 }
 
+func (s *Service) GetUserByEmail(ctx context.Context, email string) (userWithPasswordHash, error) {
+	return s.repo.GetUserByEmail(ctx, email)
+}
+
 func (s *Service) CreateUser(ctx context.Context, req createUserRequest) (userResponse, error) {
 	hashBytes, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
