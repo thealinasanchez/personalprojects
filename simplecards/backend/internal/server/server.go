@@ -31,11 +31,13 @@ func New(cfg config.Config, db *pgxpool.Pool) *Server {
 
 	s.registerRoutes()
 
-	handler := middleware.SecurityHeaders(http.HandlerFunc(s.notFoundHandler))
+	handler := http.HandlerFunc(s.notFoundHandler)
+	handlerWithSecurity := middleware.SecurityHeaders(handler)
+	handlerWithLogging := middleware.RequestLogger(handlerWithSecurity)
 
 	s.http = &http.Server{
 		Addr:         ":8080",
-		Handler:      handler,
+		Handler:      handlerWithLogging,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  30 * time.Second,
