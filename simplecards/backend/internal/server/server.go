@@ -32,7 +32,7 @@ func New(cfg config.Config, db *pgxpool.Pool) *Server {
 
 	s.http = &http.Server{
 		Addr:         ":8080",
-		Handler:      s.mux,
+		Handler:      http.HandlerFunc(s.notFoundHandler),
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 		IdleTimeout:  30 * time.Second,
