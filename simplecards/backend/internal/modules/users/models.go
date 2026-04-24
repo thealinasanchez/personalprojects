@@ -18,21 +18,3 @@ type createUserParams struct {
 	Username     string
 	PasswordHash string
 }
-
-type loginUserRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-type loginUserResponse struct {
-	User  userResponse `json:"user"`
-	Token string       `json:"token"`
-}
-
-type userWithPasswordHash struct {
-	ID           string
-	Email        string
-	Username     string
-	PasswordHash string
-	CreatedAt    string
-}

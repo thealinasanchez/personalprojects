@@ -91,36 +91,6 @@ func (r *Repository) GetUserByID(ctx context.Context, id string) (userResponse, 
 	return user, nil
 }
 
-func (r *Repository) GetUserByEmail(ctx context.Context, email string) (userWithPasswordHash, error) {
-	var user userWithPasswordHash
-
-	err := r.db.QueryRow(
-		ctx,
-		`
-		SELECT id::text, email, username, password_hash, created_at::text
-		FROM users
-		WHERE email = $1
-		`,
-		email,
-	).Scan(
-		&user.ID,
-		&user.Email,
-		&user.Username,
-		&user.PasswordHash,
-		&user.CreatedAt,
-	)
-
-	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return userWithPasswordHash{}, ErrUserNotFound
-		}
-
-		return userWithPasswordHash{}, fmt.Errorf("query user by email: %w", err)
-	}
-
-	return user, nil
-}
-
 func (r *Repository) CreateUser(ctx context.Context, params createUserParams) (userResponse, error) {
 	var user userResponse
 
