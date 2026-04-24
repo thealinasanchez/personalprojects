@@ -24,6 +24,11 @@ type loginUserRequest struct {
 	Password string `json:"password"`
 }
 
+type loginUserResponse struct {
+	User  userResponse `json:"user"`
+	Token string       `json:"token"`
+}
+
 type userWithPasswordHash struct {
 	ID           string
 	Email        string

@@ -7,15 +7,17 @@ import (
 	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"simplecards/backend/internal/config"
 )
 
 type Handler struct {
 	service *Service
 }
 
-func NewHandler(db *pgxpool.Pool) *Handler {
+func NewHandler(cfg config.Config, db *pgxpool.Pool) *Handler {
 	repo := NewRepository(db)
-	service := NewService(repo)
+	service := NewService(repo, cfg.JWTSecret)
 
 	return &Handler{
 		service: service,
@@ -172,7 +174,7 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.service.LoginUser(r.Context(), req)
+	loginResponse, err := h.service.LoginUser(r.Context(), req)
 	if err != nil {
 		if errors.Is(err, ErrInvalidCredentials) {
 			writeJSON(w, http.StatusUnauthorized, map[string]string{
@@ -187,7 +189,5 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, map[string]any{
-		"user": user,
-	})
+	writeJSON(w, http.StatusOK, loginResponse)
 }

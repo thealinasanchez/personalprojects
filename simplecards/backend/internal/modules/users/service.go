@@ -4,19 +4,23 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
 var ErrInvalidCredentials = errors.New("invalid email or password")
 
 type Service struct {
-	repo *Repository
+	repo      *Repository
+	jwtSecret string
 }
 
-func NewService(repo *Repository) *Service {
+func NewService(repo *Repository, jwtSecret string) *Service {
 	return &Service{
-		repo: repo,
+		repo:      repo,
+		jwtSecret: jwtSecret,
 	}
 }
 
@@ -47,24 +51,53 @@ func (s *Service) CreateUser(ctx context.Context, req createUserRequest) (userRe
 	return s.repo.CreateUser(ctx, params)
 }
 
-func (s *Service) LoginUser(ctx context.Context, req loginUserRequest) (userResponse, error) {
+func (s *Service) LoginUser(ctx context.Context, req loginUserRequest) (loginUserResponse, error) {
 	userWithHash, err := s.repo.GetUserByEmail(ctx, req.Email)
 	if err != nil {
 		if errors.Is(err, ErrUserNotFound) {
-			return userResponse{}, ErrInvalidCredentials
+			return loginUserResponse{}, ErrInvalidCredentials
 		}
 
-		return userResponse{}, err
+		return loginUserResponse{}, err
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(userWithHash.PasswordHash), []byte(req.Password)); err != nil {
-		return userResponse{}, ErrInvalidCredentials
+		return loginUserResponse{}, ErrInvalidCredentials
 	}
 
-	return userResponse{
+	user := userResponse{
 		ID:        userWithHash.ID,
 		Email:     userWithHash.Email,
 		Username:  userWithHash.Username,
 		CreatedAt: userWithHash.CreatedAt,
+	}
+
+	token, err := s.generateToken(user)
+	if err != nil {
+		return loginUserResponse{}, err
+	}
+
+	return loginUserResponse{
+		User:  user,
+		Token: token,
 	}, nil
+}
+
+func (s *Service) generateToken(user userResponse) (string, error) {
+	claims := jwt.MapClaims{
+		"user_id":  user.ID,
+		"email":    user.Email,
+		"username": user.Username,
+		"exp":      time.Now().Add(24 * time.Hour).Unix(),
+		"iat":      time.Now().Unix(),
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	signedToken, err := token.SignedString([]byte(s.jwtSecret))
+	if err != nil {
+		return "", fmt.Errorf("sign jwt token: %w", err)
+	}
+
+	return signedToken, nil
 }

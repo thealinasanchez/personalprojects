@@ -14,11 +14,10 @@ type Config struct {
 	DBPassword string
 	DBName     string
 	DBSSLMode  string
+	JWTSecret  string
 }
 
 func Load() (Config, error) {
-	// Load .env file if it exists.
-	// If it doesn't exist, Go will still use system environment variables.
 	_ = godotenv.Load()
 
 	cfg := Config{
@@ -28,6 +27,7 @@ func Load() (Config, error) {
 		DBPassword: os.Getenv("DB_PASSWORD"),
 		DBName:     os.Getenv("DB_NAME"),
 		DBSSLMode:  os.Getenv("DB_SSLMODE"),
+		JWTSecret:  os.Getenv("JWT_SECRET"),
 	}
 
 	if err := cfg.Validate(); err != nil {
@@ -55,6 +55,9 @@ func (c Config) Validate() error {
 	}
 	if c.DBSSLMode == "" {
 		return fmt.Errorf("DB_SSLMODE is required")
+	}
+	if c.JWTSecret == "" {
+		return fmt.Errorf("JWT_SECRET is required")
 	}
 
 	return nil
