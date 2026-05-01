@@ -21,7 +21,5 @@ func (s *Server) notFoundHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	writeJSON(w, http.StatusNotFound, map[string]string{
-		"error": "route not found",
-	})
+	writeError(w, http.StatusNotFound, "route not found")
 }

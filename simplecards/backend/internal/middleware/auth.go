@@ -31,16 +31,12 @@ func (m *AuthMiddleware) RequireAuth(next http.Handler) http.Handler {
 		authHeader := r.Header.Get("Authorization")
 
 		if authHeader == "" {
-			writeJSON(w, http.StatusUnauthorized, map[string]string{
-				"error": "authorization header is required",
-			})
+			writeError(w, http.StatusUnauthorized, "authorization header is required")
 			return
 		}
 
 		if !strings.HasPrefix(authHeader, "Bearer ") {
-			writeJSON(w, http.StatusUnauthorized, map[string]string{
-				"error": "authorization header must use Bearer token",
-			})
+			writeError(w, http.StatusUnauthorized, "authorization header must use Bearer token")
 			return
 		}
 
@@ -48,9 +44,7 @@ func (m *AuthMiddleware) RequireAuth(next http.Handler) http.Handler {
 		tokenString = strings.TrimSpace(tokenString)
 
 		if tokenString == "" {
-			writeJSON(w, http.StatusUnauthorized, map[string]string{
-				"error": "token is required",
-			})
+			writeError(w, http.StatusUnauthorized, "token is required")
 			return
 		}
 
@@ -59,25 +53,19 @@ func (m *AuthMiddleware) RequireAuth(next http.Handler) http.Handler {
 		})
 
 		if err != nil || !token.Valid {
-			writeJSON(w, http.StatusUnauthorized, map[string]string{
-				"error": "invalid or expired token",
-			})
+			writeError(w, http.StatusUnauthorized, "invalid or expired token")
 			return
 		}
 
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			writeJSON(w, http.StatusUnauthorized, map[string]string{
-				"error": "invalid token claims",
-			})
+			writeError(w, http.StatusUnauthorized, "invalid token claims")
 			return
 		}
 
 		userID, ok := claims["user_id"].(string)
 		if !ok || userID == "" {
-			writeJSON(w, http.StatusUnauthorized, map[string]string{
-				"error": "invalid token user id",
-			})
+			writeError(w, http.StatusUnauthorized, "invalid token user id")
 			return
 		}
 

@@ -8,9 +8,7 @@ type healthResponse struct {
 
 func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		writeJSON(w, http.StatusMethodNotAllowed, map[string]string{
-			"error": "method not allowed",
-		})
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 		return
 	}
 

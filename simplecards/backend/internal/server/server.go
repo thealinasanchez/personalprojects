@@ -33,10 +33,11 @@ func New(cfg config.Config, db *pgxpool.Pool) *Server {
 
 	handler := http.HandlerFunc(s.notFoundHandler)
 	handlerWithSecurity := middleware.SecurityHeaders(handler)
-	handlerWithLogging := middleware.RequestLogger(handlerWithSecurity)
+	handlerWithCORS := middleware.CORS(cfg.AllowedOrigin, handlerWithSecurity)
+	handlerWithLogging := middleware.RequestLogger(handlerWithCORS)
 
 	s.http = &http.Server{
-		Addr:         ":8080",
+		Addr:         cfg.ServerAddr(),
 		Handler:      handlerWithLogging,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,

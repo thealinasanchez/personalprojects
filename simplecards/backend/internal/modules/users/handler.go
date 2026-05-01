@@ -34,17 +34,13 @@ func (h *Handler) handleUsers(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPost:
 		h.createUser(w, r)
 	default:
-		writeJSON(w, http.StatusMethodNotAllowed, map[string]string{
-			"error": "method not allowed",
-		})
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 	}
 }
 
 func (h *Handler) handleUserByID(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		writeJSON(w, http.StatusMethodNotAllowed, map[string]string{
-			"error": "method not allowed",
-		})
+		writeError(w, http.StatusMethodNotAllowed, "method not allowed")
 		return
 	}
 
@@ -52,38 +48,28 @@ func (h *Handler) handleUserByID(w http.ResponseWriter, r *http.Request) {
 	id = strings.TrimSpace(id)
 
 	if id == "" {
-		writeJSON(w, http.StatusBadRequest, map[string]string{
-			"error": "user id is required",
-		})
+		writeError(w, http.StatusBadRequest, "user id is required")
 		return
 	}
 
 	if strings.Contains(id, "/") {
-		writeJSON(w, http.StatusNotFound, map[string]string{
-			"error": "route not found",
-		})
+		writeError(w, http.StatusNotFound, "route not found")
 		return
 	}
 
 	if err := validateUserID(id); err != nil {
-		writeJSON(w, http.StatusBadRequest, map[string]string{
-			"error": "invalid user id",
-		})
+		writeError(w, http.StatusBadRequest, "invalid user id")
 		return
 	}
 
 	user, err := h.service.GetUserByID(r.Context(), id)
 	if err != nil {
 		if errors.Is(err, ErrUserNotFound) {
-			writeJSON(w, http.StatusNotFound, map[string]string{
-				"error": "user not found",
-			})
+			writeError(w, http.StatusNotFound, "user not found")
 			return
 		}
 
-		writeJSON(w, http.StatusInternalServerError, map[string]string{
-			"error": "failed to fetch user",
-		})
+		writeError(w, http.StatusInternalServerError, "failed to fetch user")
 		return
 	}
 
@@ -95,9 +81,7 @@ func (h *Handler) handleUserByID(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) listUsers(w http.ResponseWriter, r *http.Request) {
 	users, err := h.service.ListUsers(r.Context())
 	if err != nil {
-		writeJSON(w, http.StatusInternalServerError, map[string]string{
-			"error": "failed to fetch users",
-		})
+		writeError(w, http.StatusInternalServerError, "failed to fetch users")
 		return
 	}
 
@@ -110,33 +94,25 @@ func (h *Handler) createUser(w http.ResponseWriter, r *http.Request) {
 	var req createUserRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		writeJSON(w, http.StatusBadRequest, map[string]string{
-			"error": "invalid json body",
-		})
+		writeError(w, http.StatusBadRequest, "invalid json body")
 		return
 	}
 
 	req = normalizeCreateUserRequest(req)
 
 	if err := validateCreateUserRequest(req); err != nil {
-		writeJSON(w, http.StatusBadRequest, map[string]string{
-			"error": err.Error(),
-		})
+		writeError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	user, err := h.service.CreateUser(r.Context(), req)
 	if err != nil {
 		if errors.Is(err, ErrUserAlreadyExists) {
-			writeJSON(w, http.StatusConflict, map[string]string{
-				"error": "email or username already exists",
-			})
+			writeError(w, http.StatusConflict, "email or username already exists")
 			return
 		}
 
-		writeJSON(w, http.StatusInternalServerError, map[string]string{
-			"error": "failed to create user",
-		})
+		writeError(w, http.StatusInternalServerError, "failed to create user")
 		return
 	}
 
